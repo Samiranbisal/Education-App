@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
 import { useParams, useSearchParams } from 'react-router-dom';
+import './HostRoom.css'; // ✅ Make sure the CSS filename matches exactly
 
 const Room = () => {
   const { roomId } = useParams();
@@ -35,40 +36,23 @@ const Room = () => {
       container: element,
       scenario: {
         mode: ZegoUIKitPrebuilt.LiveStreaming,
-        config: {
-          role,
-        },
+        config: { role },
       },
     });
   };
 
   useEffect(() => {
-    if (!roomId) return;
-    if (initializeRef.current) return;
-    if (containerRef.current) {
-      initializeRef.current = true;
-      myMeeting(containerRef.current);
-    }
+    if (!roomId || initializeRef.current || !containerRef.current) return;
+    initializeRef.current = true;
+    myMeeting(containerRef.current);
   }, [roomId]);
 
-  const styles = {
-    shareButton: {
-      padding: '8px 12px',
-      backgroundColor: '#007bff',
-      color: '#fff',
-      textDecoration: 'none',
-      borderRadius: '6px',
-      fontSize: '14px',
-      display: 'inline-block',
-    },
-  };
-
   return (
-    <div>
-      <div ref={containerRef}>Inside Room</div>
+    <div className="room-container">
+      <div className="zego-video-container" ref={containerRef}>Inside Room</div>
 
       {(role_str === 'host' || role_str === 'cohost') && (
-        <div style={{ marginTop: 20 }}>
+        <div className="invite-section">
           <h4>Invite Audience</h4>
           <p>Share this link:</p>
 
@@ -76,62 +60,29 @@ const Room = () => {
             type="text"
             value={audienceURL}
             readOnly
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+            className="invite-input"
           />
 
           <img
             src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(audienceURL)}&size=150x150`}
             alt="QR Code"
+            className="qr-code"
           />
 
-          <div style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {/* WhatsApp */}
-            <a
-              href={`https://wa.me/?text=Join our live stream: ${encodeURIComponent(audienceURL)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styles.shareButton}
-            >
+          <div className="share-buttons">
+            <a href={`https://wa.me/?text=Join our live stream: ${encodeURIComponent(audienceURL)}`} target="_blank" rel="noopener noreferrer" className="share-button">
               📲 WhatsApp
             </a>
-
-            {/* Email */}
-            <a
-              href={`mailto:?subject=Join Our Live Stream&body=Click here to join: ${encodeURIComponent(audienceURL)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styles.shareButton}
-            >
+            <a href={`mailto:?subject=Join Our Live Stream&body=Click here to join: ${encodeURIComponent(audienceURL)}`} target="_blank" rel="noopener noreferrer" className="share-button">
               ✉️ Email
             </a>
-
-            {/* Telegram */}
-            <a
-              href={`https://t.me/share/url?url=${encodeURIComponent(audienceURL)}&text=Join our live stream`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styles.shareButton}
-            >
+            <a href={`https://t.me/share/url?url=${encodeURIComponent(audienceURL)}&text=Join our live stream`} target="_blank" rel="noopener noreferrer" className="share-button">
               📢 Telegram
             </a>
-
-            {/* Facebook */}
-            <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(audienceURL)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styles.shareButton}
-            >
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(audienceURL)}`} target="_blank" rel="noopener noreferrer" className="share-button">
               📘 Facebook
             </a>
-
-            {/* Twitter (X) */}
-            <a
-              href={`https://twitter.com/intent/tweet?text=Join our live stream&url=${encodeURIComponent(audienceURL)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={styles.shareButton}
-            >
+            <a href={`https://twitter.com/intent/tweet?text=Join our live stream&url=${encodeURIComponent(audienceURL)}`} target="_blank" rel="noopener noreferrer" className="share-button">
               🐦 X (Twitter)
             </a>
           </div>

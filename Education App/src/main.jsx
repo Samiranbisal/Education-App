@@ -4,6 +4,7 @@ import App from "./App";
 import "./styles/Auth.css"; // global import (optional)
 import "@zegocloud/zimkit-react/index.css";
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />

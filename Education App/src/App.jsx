@@ -60,6 +60,8 @@ function App() {
           <Route path="/host-streaming" element={<HostJoin />} />
           <Route path="/live-streaming" element={<HostHome />} />
           <Route path='/room/:roomId' element={<HostRoom/>} />
+          <Route path="*" element={<div>404 - Page Not Found</div>} />
+
         </Routes>
       </LayoutWrapper>
     </BrowserRouter>

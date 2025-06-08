@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './HostHome.css'; // ✅ Import CSS
 
 const Home = () => {
   const [roomId, setRoomId] = useState('');
@@ -8,7 +9,6 @@ const Home = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Auto-generate room ID on first load
   useEffect(() => {
     const generateRoomId = () => 'room-' + Math.random().toString(36).substr(2, 6);
     setRoomId(generateRoomId());
@@ -21,12 +21,12 @@ const Home = () => {
     }
 
     setError('');
-    localStorage.setItem('username', name); // used in Room.jsx
+    localStorage.setItem('username', name);
     navigate(`/room/${roomId}?role=${role}`);
   };
 
   return (
-    <div style={styles.container}>
+    <div className="home-container">
       <h2 style={{ marginBottom: 20 }}>🎥 Join Live Stream</h2>
 
       <input
@@ -34,7 +34,7 @@ const Home = () => {
         placeholder="Enter Room ID"
         value={roomId}
         onChange={(e) => setRoomId(e.target.value)}
-        style={styles.input}
+        className="home-input"
       />
 
       <input
@@ -42,83 +42,38 @@ const Home = () => {
         placeholder="Enter Your Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        style={styles.input}
+        className="home-input"
       />
 
-      <select value={role} onChange={(e) => setRole(e.target.value)} style={styles.input}>
+      <select value={role} onChange={(e) => setRole(e.target.value)} className="home-input">
         <option value="host">Host</option>
         <option value="cohost">Cohost</option>
         <option value="audience">Audience</option>
       </select>
 
-      {/* Role-based preview UI */}
       {role === 'host' && (
-        <div style={styles.previewBox}>
+        <div className="preview-box">
           <strong>Host Preview:</strong> Start the stream, control participants, and manage chat.
         </div>
       )}
       {role === 'cohost' && (
-        <div style={styles.previewBox}>
+        <div className="preview-box">
           <strong>Cohost Preview:</strong> Share your mic/cam and help manage the session.
         </div>
       )}
       {role === 'audience' && (
-        <div style={styles.previewBox}>
+        <div className="preview-box">
           <strong>Audience Preview:</strong> Watch live, send messages, no mic/cam access.
         </div>
       )}
 
-      {error && <p style={styles.error}>{error}</p>}
+      {error && <p className="home-error">{error}</p>}
 
-      <button onClick={handleJoin} style={styles.button}>
+      <button onClick={handleJoin} className="home-button">
         🚪 Join Room
       </button>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    padding: 40,
-    maxWidth: 400,
-    margin: '80px auto',
-    textAlign: 'center',
-    background: '#ffffff',
-    borderRadius: 12,
-    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    fontFamily: 'sans-serif',
-  },
-  input: {
-    padding: 10,
-    width: '100%',
-    marginBottom: 20,
-    fontSize: 16,
-    borderRadius: 6,
-    border: '1px solid #ccc',
-  },
-  button: {
-    padding: '10px 20px',
-    fontSize: 16,
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 6,
-    cursor: 'pointer',
-    width: '100%',
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  previewBox: {
-    background: '#f9f9f9',
-    padding: '12px',
-    border: '1px dashed #ccc',
-    borderRadius: 8,
-    marginBottom: 20,
-    fontSize: 14,
-    color: '#333',
-  },
 };
 
 export default Home;
